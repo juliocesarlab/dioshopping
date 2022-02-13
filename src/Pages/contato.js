@@ -25,7 +25,7 @@ const Contatos = () => {
         setMessage(filteredData)
     }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         setValidator(false);
         if(author.length <= 0 || content.length <= 0){
             return setValidator(!validator)
@@ -35,24 +35,22 @@ const Contatos = () => {
             message: content,
         }
 
-        fetch(url, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(bodyForm)
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if(data.id) {
-                setRender(true);
-                setSuccess(true);
-                setTimeout(() => {
-                    setSuccess(false);
-                }, 5000)
-            }
-        })
-        
+        const result = response.json()
+        const { id } = result
+        if(id) {
+            setRender(true);
+            setSuccess(true);
+            setTimeout(() => {
+                setSuccess(false);
+            }, 5000)
+        }
         setAuthor('');
         setContent('');
     }  
