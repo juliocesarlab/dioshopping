@@ -10,12 +10,20 @@ const Contatos = () => {
     const [validator, setValidator] = useState(false);
     const [render, setRender] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [search, setSearch] = useState('')
 
     useEffect(async () => {
         const response = await fetch(url)
         const data = await response.json();
-        setMessage(data);
-    }, [render])
+        if (search.length > 0) filterData(data)
+        else setMessage(data);
+        
+    }, [render, search])
+
+    function filterData(data) {
+        const filteredData = data.filter(message => message.email.startsWith(search))
+        setMessage(filteredData)
+    }
 
     const sendMessage = () => {
         setValidator(false);
@@ -47,8 +55,6 @@ const Contatos = () => {
         
         setAuthor('');
         setContent('');
-        
-        console.log(content)
     }  
 
     return(
@@ -57,6 +63,14 @@ const Contatos = () => {
                 <TextField id="name" label="Name" value={author} onChange={(event)=>{setAuthor(event.target.value)}} fullWidth/>
                 <TextField id="message" label="Message" value={content} onChange={(event)=>{setContent(event.target.value)}} fullWidth/>
             </Grid>
+
+            <div className="mt-3 mb-3">
+                <label for="exampleFormControlInput1" className="form-label">Procure por um autor</label>
+                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Digite o nome de algum autor das mensagens" 
+                value={search} 
+                onChange={(e) => setSearch(e.target.value)}
+                />
+            </div>
 
             {validator && 
                 <div className="alert alert-warning alert-dismissible fade show mt-2" role="alert">
