@@ -17,12 +17,20 @@ const Contatos = () => {
         const data = await response.json();
         if (search.length > 0) filterData(data)
         else setMessage(data);
+        console.log(data)
         
     }, [render, search])
 
     function filterData(data) {
         const filteredData = data.filter(message => 
             message.email.startsWith(search) || message.email.includes(search))
+        setMessage(filteredData)
+    }
+
+    function removeItem(id) {
+        /*Aqui eu poderia fazer uma requisição http com delete para remover do bd
+        mas como não existe essa opção na api, removerei o item tela*/
+        const filteredData = message.filter(msg => msg.id !== id)
         setMessage(filteredData)
     }
 
@@ -92,7 +100,12 @@ const Contatos = () => {
                 return(
                     <div className="card mt-2" key={content.id}>
                         <div className="card-body">
-                            <h5 className="card-title">{content.email}</h5>
+                            <div class="d-flex justify-content-between">
+                                <h5 className="card-title">{content.email}</h5>
+                                <button type="button" class="btn btn-danger" onClick={(e) => removeItem(content.id)}>
+                                    Delete
+                                </button>
+                            </div>
                             <p className="card-text">{content.message}</p>
                             <p className="card-text"><small className="text-muted">{content.created_at}</small></p>
                         </div>
