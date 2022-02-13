@@ -21,7 +21,8 @@ const Contatos = () => {
     }, [render, search])
 
     function filterData(data) {
-        const filteredData = data.filter(message => message.email.startsWith(search))
+        const filteredData = data.filter(message => 
+            message.email.startsWith(search) || message.email.includes(search))
         setMessage(filteredData)
     }
 
